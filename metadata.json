@@ -1,0 +1,6 @@
+{
+  "name": "VerifyKit",
+  "description": "A premium enterprise ID verification platform with high-fidelity document scanning, 11 interactive pages, and a live TypeScript console execution terminal with recursive validation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
