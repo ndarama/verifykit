@@ -150,7 +150,7 @@ export function generateRwandanIDFromFilename(fileName: string): ExtractedIdData
   for (let i = 0; i < 10; i++) cardDigits += ((hash + i * 13) % 10).toString();
 
   return {
-    document: 'National Identity Card',
+    document: 'International ID',
     country: 'Republic of Rwanda',
     names,
     idNo: formattedId,
@@ -184,7 +184,7 @@ export async function extractFromJpg(fileName: string, fileType: string, scenari
   // Slight delay to simulate processing
   await new Promise((r) => setTimeout(r, 400));
 
-  if (scenario === 'invalid_id') throw new Error('Unreadable ID Document: The text regions extracted from the image do not map to the Rwanda National Identity Card format.');
+  if (scenario === 'invalid_id') throw new Error('Unreadable ID Document: The text regions extracted from the image do not map to the Genuine ID format.');
 
   const generated = generateRwandanIDFromFilename(fileName);
   if (scenario === 'mismatch') {

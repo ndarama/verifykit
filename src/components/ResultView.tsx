@@ -55,7 +55,7 @@ export default function ResultView({
       <div className="max-w-md mx-auto text-center py-16 space-y-4 font-sans text-slate-800">
         <XCircle className="w-12 h-12 text-rose-500 mx-auto" />
         <h3 className="text-xl font-bold">No Records Found</h3>
-        <p className="text-slate-500 text-sm">Please submit a Rwanda National ID card scan in the workspace first.</p>
+        <p className="text-slate-500 text-sm">Please submit a Genuine ID scan in the workspace first.</p>
         <button
           onClick={() => setCurrentPage('dashboard')}
           className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold uppercase rounded-lg transition cursor-pointer"
@@ -120,7 +120,7 @@ export default function ResultView({
         <div className="bg-slate-50 border-b border-slate-100 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-sm shrink-0">
-              <Fingerprint className="w-5.5 h-5.5" />
+              <Fingerprint className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-base font-black text-slate-900 tracking-tight leading-none">Extracted ID Details</h2>
@@ -132,7 +132,7 @@ export default function ResultView({
           
           <button
             onClick={handleDone}
-            className="text-xs font-bold text-slate-500 hover:text-indigo-600 transition cursor-pointer px-3 py-1.5 bg-slate-150/50 hover:bg-slate-150 rounded-xl"
+            className="text-xs font-bold text-slate-500 hover:text-indigo-600 transition cursor-pointer px-3 py-1.5 bg-slate-100/50 hover:bg-slate-100 rounded-xl"
           >
             Close
           </button>
@@ -184,10 +184,10 @@ export default function ResultView({
                   <div className="flex justify-between items-start border-b border-indigo-100 pb-1.5">
                     <div className="space-y-0.5">
                       <span className="text-[8px] font-black uppercase tracking-wider text-cyan-800 leading-none block">
-                        REPUBLIKA Y'U RWANDA
+                        GENUINE ID
                       </span>
                       <span className="text-[10px] font-black text-indigo-900 uppercase tracking-tight block mt-0.5">
-                        NATIONAL IDENTITY CARD
+                        INTERNATIONAL ID
                       </span>
                     </div>
                     <div className="w-6 h-6 bg-yellow-400/20 border border-yellow-600 rounded-full flex items-center justify-center relative shadow-xs shrink-0">
@@ -215,7 +215,7 @@ export default function ResultView({
                     </div>
 
                     <div className="col-span-9 space-y-1.5 text-[10px] leading-snug">
-                      <div className="bg-[#e6f4ea]/40 border border-emerald-150 rounded-lg px-2 py-1">
+                      <div className="bg-[#e6f4ea]/40 border border-emerald-200 rounded-lg px-2 py-1">
                         <span className="text-[7px] font-black text-slate-400 block uppercase">ID NO</span>
                         <span className="text-xs font-mono font-black text-[#137333] tracking-wide">
                           {formatIDNumber(data.idNo)}
@@ -260,7 +260,7 @@ export default function ResultView({
                   <div>
                     <div className="flex justify-between items-center border-b border-indigo-100 pb-1.5">
                       <span className="text-[8px] font-black text-[#1a365d] block uppercase tracking-wider leading-none">
-                        REPUBLIKA Y'U RWANDA &bull; NATIONAL ID
+                        GENUINE ID &bull; INTERNATIONAL ID
                       </span>
                       <span className="inline-block px-1 bg-slate-100 rounded text-[7.5px] font-bold text-slate-500 border">
                         REVERSE
@@ -270,14 +270,14 @@ export default function ResultView({
                     <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-[9.5px] leading-snug">
                       <div>
                         <span className="text-[7px] font-black text-slate-400 block uppercase">Blood Group / Itsinda</span>
-                        <p className="font-extrabold text-red-650 bg-red-50 inline-block px-1 rounded border border-red-100">
+                        <p className="font-extrabold text-red-600 bg-red-50 inline-block px-1 rounded border border-red-100">
                           {data.bloodGroup}
                         </p>
                       </div>
 
                       <div>
                         <span className="text-[7px] font-black text-slate-400 block uppercase">Valid Until</span>
-                        <p className="font-bold text-emerald-700 bg-emerald-50 rounded border border-emerald-150 px-1 inline-block">
+                        <p className="font-bold text-emerald-700 bg-emerald-50 rounded border border-emerald-200 px-1 inline-block">
                           {data.validUntil}
                         </p>
                       </div>
@@ -308,11 +308,11 @@ export default function ResultView({
             </span>
 
             {/* Structured Table Layout with smooth lines */}
-            <div className="border border-slate-150 rounded-xl overflow-hidden bg-slate-50/50 flex-1 flex flex-col justify-between" id="fields-inspector-box">
-              <div className="divide-y divide-slate-150 flex-1">
+            <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50 flex-1 flex flex-col justify-between" id="fields-inspector-box">
+              <div className="divide-y divide-slate-200 flex-1">
                 {[
                   { label: "Names", val: data.names, icon: <User className="w-3.5 h-3.5" /> },
-                  { label: "National ID Number", val: formatIDNumber(data.idNo), icon: <Hash className="w-3.5 h-3.5" /> },
+                  { label: "International ID Number", val: formatIDNumber(data.idNo), icon: <Hash className="w-3.5 h-3.5" /> },
                   { label: "Date of Birth", val: data.dob, icon: <Calendar className="w-3.5 h-3.5" /> },
                   { label: "Gender", val: data.sex === 'G' ? "Gabo / Male (G)" : "Gore / Female (F)", icon: <User className="w-3.5 h-3.5" /> },
                   { label: "Nationality", val: data.nationality, icon: <Shield className="w-3.5 h-3.5" /> },

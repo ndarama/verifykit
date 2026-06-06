@@ -191,7 +191,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'jean.claude@techlabs.com',
     defaultPhone: '+250 788 998 877',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Jean Claude Habimana',
       idNo: '198 7654 3210 5',
@@ -223,7 +223,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'claudine.mukamana@ops.rw',
     defaultPhone: '+250 788 765 432',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Claudine Mukamana',
       idNo: '198 7654 3210 7',
@@ -255,7 +255,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'eric.nsengiyumva@finance.gov.rw',
     defaultPhone: '+250 782 112 233',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Eric Nsengiyumva',
       idNo: '198 7654 9876 2',
@@ -287,7 +287,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'diane.uwase@designstudio.rw',
     defaultPhone: '+250 783 456 789',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Diane Uwase',
       idNo: '198 7654 3210 7',
@@ -319,7 +319,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'patrick.niyonkuru@cargo.rw',
     defaultPhone: '+250 785 678 901',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Patrick Niyonkuru',
       idNo: '123 4567 8901 2',
@@ -351,7 +351,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'grace.ingabire@talent.rw',
     defaultPhone: '+250 786 789 012',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Grace Ingabire',
       idNo: '198 7654 3210 4',
@@ -383,7 +383,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'aimable.ndayisaba@media.rw',
     defaultPhone: '+250 787 890 123',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Aimable Ndayisaba',
       idNo: '198 7654 3210 3',
@@ -415,7 +415,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'sandrine.kayitesi@dataminds.rw',
     defaultPhone: '+250 789 901 234',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Sandrine Kayitesi',
       idNo: '198 2345 6789 2',
@@ -447,7 +447,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'emmanuel.rutayisire@trade.rw',
     defaultPhone: '+250 781 234 567',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Emmanuel Rutayisire',
       idNo: '195 3876 5321 0',
@@ -479,7 +479,7 @@ export const RWANDAN_PRESETS = [
     defaultEmail: 'bella.umutoni@pragency.rw',
     defaultPhone: '+250 784 567 890',
     extracted: {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Bella Umutoni',
       idNo: '198 7654 3210 8',
@@ -673,7 +673,7 @@ export function generateRwandanIDFromFilename(fileName: string): ExtractedIdData
   }
 
   return {
-    document: 'National Identity Card',
+    document: 'International ID',
     country: 'Republic of Rwanda',
     names,
     idNo: formattedId, 
@@ -740,14 +740,14 @@ export class DocumentExtractor {
 
     if (scenario === 'invalid_id') {
       onProgressLog(makeLog('scanner', `Parsing Error: Extracted text elements do not contain valid national card layout.`));
-      throw new Error(`Unreadable ID Document: The text regions extracted from the image do not map to the Rwanda National Identity Card format.`);
+      throw new Error(`Unreadable ID Document: The text regions extracted from the image do not map to the Genuine ID format.`);
     }
 
     
 
     // Default Rwanda National ID card of Jean Claude Habimana as per requested details
     const standardRwandaID: ExtractedIdData = {
-      document: 'National Identity Card',
+      document: 'International ID',
       country: 'Republic of Rwanda',
       names: 'Jean Claude Habimana',
       idNo: '198 7654 3210 5',
@@ -913,7 +913,7 @@ export class VerificationService {
           id: 'REC-394852',
           timestamp: new Date(Date.now() - 3600000 * 2).toLocaleString(),
           extractedData: {
-            document: 'National Identity Card',
+            document: 'International ID',
             country: 'Republic of Rwanda',
             names: 'Jean Claude Habimana',
             idNo: '198 7654 3210 5',
@@ -1075,54 +1075,24 @@ export class VerificationService {
     let reason: string | undefined = undefined;
 
     try {
-      if (customData) {
-        // Deep clone so changes in UI don't affect previous saved records
-        extracted = JSON.parse(JSON.stringify(customData));
-        this.addLog('file', `Using custom auto-populated ID review structure...`);
-        
-        // Match scenario rules
-        if (scenario === 'mismatch') {
-          extracted!.containsDemoText = false;
-          extracted!.containsSampleText = false;
-          extracted!.similarityScore = 0.68;
-        } else if (scenario === 'match') {
-          extracted!.containsDemoText = true;
-          extracted!.containsSampleText = true;
-          extracted!.similarityScore = 1.0;
-        } else if (scenario === 'sparse_scan') {
-          extracted!.containsDemoText = false;
-          extracted!.containsSampleText = false;
-          extracted!.similarityScore = 0.5;
-        } else if (scenario === 'invalid_id') {
-          this.addLog('scanner', `Parsing Error: Extracted text elements do not contain valid national card layout.`);
-          throw new Error(`Unreadable ID Document: The text regions extracted from the image do not map to the Rwanda National Identity Card format.`);
-        }
-        
-        // Add artificial short OCR log trail
-        this.addLog('scanner', `OCR Stage 1: Document boundary detection & alignment complete.`);
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        this.addLog('scanner', `OCR Stage 2: Segmented Text Line extraction complete.`);
-        await new Promise((resolve) => setTimeout(resolve, 350));
-        this.addLog('scanner', `OCR Stage 3: Field auto-classification and mapping complete.`);
-      } else {
-        extracted = await this.documentExtractor.extractFromJpg(
-          fileName,
-          fileType,
-          scenario,
-          (pLog) => this.addLog(pLog.type, pLog.message),
-          presetKey
-        );
+      if (!customData) {
+        throw new Error('Verification requires OCR-extracted data from the uploaded ID image.');
       }
+
+      // Deep clone so changes in UI don't affect previous saved records.
+      extracted = JSON.parse(JSON.stringify(customData));
+      this.addLog('file', `Using OCR-extracted ID review structure from uploaded image.`);
+      this.addLog('scanner', `OCR text extraction and field mapping complete.`);
 
       this.addLog('comparison', `Running identity compliance comparisons...`);
       this.addLog('comparison', `Extracted document issuer: '${extracted.country}'`);
       this.addLog('comparison', `Extracted document name: '${extracted.names}'`);
-      this.addLog('comparison', `Assessed Layout Similarity: ${(extracted.similarityScore * 105 - Math.random() * 5).toFixed(0)}%`);
+      this.addLog('comparison', `Assessed Layout Similarity: ${(extracted.similarityScore * 100).toFixed(0)}%`);
 
       // 90% strict similarity check requirement implementation!
       if (extracted.similarityScore >= 0.90) {
         status = 'Verified';
-        this.addLog('success', `Compliance check: SUCCESS. Subject ID matched all Rwandan National ID layout specifications (Similarity Score: ${(extracted.similarityScore * 105 - Math.random() * 5).toFixed(1)}%).`);
+        this.addLog('success', `Compliance check: SUCCESS. Subject ID matched Genuine ID layout specifications (Similarity Score: ${(extracted.similarityScore * 100).toFixed(1)}%).`);
       } else {
         status = 'Rejected';
         reason = `Compliance Rejection: Similarity score of ${(extracted.similarityScore * 100).toFixed(0)}% falls below the 90% threshold. The document is missing critical security markings (SAMPLE / DEMO watermarks or back-side identity parameters).`;
@@ -1154,4 +1124,3 @@ export class VerificationService {
 
 // Instantiate and export a singleton service for state persistence across renderers
 export const verificationService = new VerificationService();
-

@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { getUserById, createRecord } from '../../lib/db';
-import { extractFromJpg } from '../../lib/utils';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'devsecret';
 
@@ -22,15 +21,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const user = await getUserFromReq(req);
   if (!user) return res.status(401).send('Unauthorized');
 
-  const { fileName, fileType, scenario = 'match', customData } = req.body;
+  const { fileName, customData } = req.body;
   try {
-    let extracted;
-    if (customData) {
-      extracted = customData;
-    } else {
-      extracted = await extractFromJpg(fileName || 'unknown.jpg', fileType || 'image/jpeg', scenario);
+    if (!customData) {
+      return res.status(400).send('Verification requires OCR-extracted data. No identity data was generated from the filename.');
     }
 
+    const extracted = customData;
     const status = extracted.similarityScore >= 0.9 ? 'Verified' : 'Rejected';
     const reason = status === 'Rejected' ? `Similarity ${(extracted.similarityScore * 100).toFixed(0)}% below threshold` : undefined;
     const record = {

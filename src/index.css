@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
+@source ".";
+@source "../pages";
 
-@theme {
+:root {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
@@ -12,7 +14,6 @@ body {
   color: #0f172a;
 }
 
-/* Custom styles for glowing details and scan transitions */
 @keyframes laser {
   0%, 100% {
     top: 0%;
@@ -26,6 +27,36 @@ body {
 
 .animate-laser {
   animation: laser 3s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 220ms ease-out both;
+}
+
+@keyframes scale-up {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-up {
+  animation: scale-up 180ms ease-out both;
 }
 
 /* Custom scrollbars for the black console log */
@@ -46,4 +77,3 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #4b5563;
 }
-

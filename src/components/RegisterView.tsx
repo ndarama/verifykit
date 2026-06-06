@@ -100,7 +100,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="border-b border-slate-150 pb-4">
+          <div className="border-b border-slate-200 pb-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
               <Building className="w-4 h-4 text-slate-500" />
               Company Details
@@ -115,7 +115,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
                   value={formData.companyName}
                   onChange={handleInputChange}
                   placeholder="e.g., Kigali Tech Hub Ltd"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
 
@@ -128,7 +128,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
                     value={formData.companyEmail}
                     onChange={handleInputChange}
                     placeholder="e.g., compliance@kigalitech.rw"
-                    className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </div>
 
@@ -140,14 +140,14 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
                     value={formData.companyContact}
                     onChange={handleInputChange}
                     placeholder="e.g., +250 788 123 456"
-                    className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-b border-slate-150 pb-4 pt-1">
+          <div className="border-b border-slate-200 pb-4 pt-1">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
               <User className="w-4 h-4 text-slate-500" />
               Representative Admin
@@ -162,7 +162,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
                   value={formData.repName}
                   onChange={handleInputChange}
                   placeholder="e.g., Sarah Jenkins"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
 
@@ -174,7 +174,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
                   value={formData.repPosition}
                   onChange={handleInputChange}
                   placeholder="e.g., HR Director"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Minimum 6 characters"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
 
@@ -207,7 +207,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   placeholder="Re-enter password"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function RegisterView({ setCurrentPage }: RegisterViewProps) {
           </button>
         </form>
 
-        <div className="mt-6 pt-4 border-t border-slate-150 text-center text-xs text-slate-500">
+        <div className="mt-6 pt-4 border-t border-slate-200 text-center text-xs text-slate-500">
           Already registered?{' '}
           <button
             onClick={() => setCurrentPage('login')}

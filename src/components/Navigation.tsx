@@ -103,7 +103,7 @@ export default function Navigation({
                   className="p-2 hover:bg-slate-100 text-slate-500 hover:text-rose-600 rounded-lg transition-colors"
                   title="Logout representative"
                 >
-                  <LogOut className="w-4.5 h-4.5" />
+                  <LogOut className="w-4 h-4" />
                 </button>
               </div>
             ) : (
@@ -183,7 +183,7 @@ export default function Navigation({
             ))}
           </div>
 
-          <div className="border-t border-slate-150 pt-2.5 pb-1 space-y-1">
+          <div className="border-t border-slate-200 pt-2.5 pb-1 space-y-1">
             <div className="text-[11px] font-bold text-slate-400 uppercase px-3 mb-1">Legal Documents</div>
             {legalLinks.map((lib) => (
               <button
@@ -199,7 +199,7 @@ export default function Navigation({
             ))}
           </div>
 
-          <div className="border-t border-slate-150 pt-3">
+          <div className="border-t border-slate-200 pt-3">
             {activeUser ? (
               <div className="space-y-2">
                 <div className="px-3 py-1 text-xs text-slate-500 font-semibold truncate bg-slate-50 rounded border">

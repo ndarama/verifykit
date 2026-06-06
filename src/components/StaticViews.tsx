@@ -47,19 +47,19 @@ export function AboutView({ setCurrentPage }: AboutViewProps) {
             <div className="flex gap-2.5 items-start">
               <CheckCircle className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-slate-850">Compliant Frictionless Audits:</strong> Keep track of candidate rosters without storing sensitive documents in volatile temporary folders.
+                <strong className="text-slate-800">Compliant Frictionless Audits:</strong> Keep track of candidate rosters without storing sensitive documents in volatile temporary folders.
               </div>
             </div>
             <div className="flex gap-2.5 items-start">
-              <CheckCircle className="w-4 h-4 text-teal-605 shrink-0 mt-0.5" />
+              <CheckCircle className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-slate-850">Advanced Fuzzy Comparisons:</strong> Prevent typographical mismatch inconsistencies with nested recursive comparisons.
+                <strong className="text-slate-800">Advanced Fuzzy Comparisons:</strong> Prevent typographical mismatch inconsistencies with nested recursive comparisons.
               </div>
             </div>
             <div className="flex gap-2.5 items-start">
-              <CheckCircle className="w-4 h-4 text-teal-605 shrink-0 mt-0.5" />
+              <CheckCircle className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-slate-850">Terminal Integrity Monitoring:</strong> Inspect how backend TypeScript compilation blocks run in real-time.
+                <strong className="text-slate-800">Terminal Integrity Monitoring:</strong> Inspect how backend TypeScript compilation blocks run in real-time.
               </div>
             </div>
           </div>
@@ -99,8 +99,8 @@ export function FaqView() {
       a: 'VerifyKit strictly enforces secure file extension policies. The system accepts JPG and JPEG document images only (with .jpg or .jpeg extensions). Attempting to upload PNG or PDF files will automatically trigger exception handling blocks to prevent malware injections.'
     },
     {
-      q: 'Does the scanner perform live OCR on Rwandan ID cards?',
-      a: 'Yes, our model simulates a neural text-segmentation scanner tailored to Republic of Rwanda National Identity Card standards, automatically processing name strings, card series number structures, issue places, and expiration bounds.'
+      q: 'Does the scanner perform live OCR on Genuine ID documents?',
+      a: 'Yes, our model uses a neural text-segmentation scanner tailored to International ID standards, automatically processing name strings, card series number structures, issue places, and expiration bounds.'
     },
     {
       q: 'What occurs if the candidate entered name does not match the card scan?',
@@ -164,7 +164,7 @@ export function PrivacyView() {
         <p className="text-slate-500 text-mini">Last Modified: June 6, 2026</p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm text-xs leading-relaxed text-slate-650">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm text-xs leading-relaxed text-slate-600">
         <h3 className="text-base font-bold text-slate-900 border-b pb-2">1. Scope and Information Collected</h3>
         <p>
           VerifyKit operates as a non-custodial, client-side corporate identity compliance platform. We do not store, distribute, or stream candidate photo IDs to third-party databases. Uploaded JPG/JPEG materials are mapped internally inside sandboxed JS processes to simulate text extracts; binary files are deleted upon matching evaluation.
@@ -202,7 +202,7 @@ export function TermsView() {
         <p className="text-slate-500 text-mini">Effective Date: June 6, 2026</p>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm text-xs leading-relaxed text-slate-650">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm text-xs leading-relaxed text-slate-600">
         <h3 className="text-base font-bold text-slate-900 border-b pb-2">1. Agreement to Terms</h3>
         <p>
           By creating a corporate hub on VerifyKit and allocating representative credentials, you agree to comply with the legal bindings stated herein. Individuals executing audits warrant they represent an authorized organization.
@@ -210,7 +210,7 @@ export function TermsView() {
 
         <h3 className="text-base font-bold text-slate-900 border-b pb-2">2. Verification Accuracy and Simulated Extractor</h3>
         <p>
-          VerifyKit utilizes asynchronous algorithms to parse JPEG document text lines. It is-designed to crossweight names against subject registers. Organizations acknowledge that while scanning mimics Republic of Rwanda National Card criteria, manual oversight is recommended during critical compliance pipelines.
+          VerifyKit utilizes asynchronous algorithms to parse JPEG document text lines. It is-designed to crossweight names against subject registers. Organizations acknowledge that while scanning mimics International ID document criteria, manual oversight is recommended during critical compliance pipelines.
         </p>
 
         <h3 className="text-base font-bold text-slate-900 border-b pb-2">3. Prohibited Usage of Platforms</h3>
@@ -263,7 +263,7 @@ export function ContactView() {
   return (
     <div className="max-w-xl mx-auto py-8 space-y-8 animate-fade-in font-sans text-slate-800">
       <div className="text-center space-y-2">
-        <div className="inline-flex p-2 bg-blue-50 border border-blue-110 rounded-full text-blue-600">
+        <div className="inline-flex p-2 bg-blue-50 border border-blue-100 rounded-full text-blue-600">
           <Mail className="w-6 h-6" />
         </div>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Contact Support Hub</h2>
@@ -277,7 +277,7 @@ export function ContactView() {
 
         {success ? (
           <div className="text-center py-8 space-y-4">
-            <div className="inline-flex p-3 bg-emerald-100 text-emerald-600 rounded-full border border-emerald-250 animate-bounce">
+            <div className="inline-flex p-3 bg-emerald-100 text-emerald-600 rounded-full border border-emerald-200 animate-bounce">
               <CheckCircle className="w-8 h-8" />
             </div>
             <h3 className="text-lg font-bold text-slate-900">Message Transported</h3>
@@ -302,7 +302,7 @@ export function ContactView() {
                   value={form.name}
                   onChange={handleChange}
                   placeholder="e.g., Sarah Jenkins"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
 
@@ -314,7 +314,7 @@ export function ContactView() {
                   value={form.email}
                   onChange={handleChange}
                   placeholder="e.g., mail@company.com"
-                  className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 />
               </div>
             </div>
@@ -326,8 +326,8 @@ export function ContactView() {
                 name="subject"
                 value={form.subject}
                 onChange={handleChange}
-                placeholder="e.g., Rwanda National ID scanner limits"
-                className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  placeholder="e.g., Genuine ID scanner limits"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
             </div>
 
@@ -339,7 +339,7 @@ export function ContactView() {
                 onChange={handleChange}
                 rows={4}
                 placeholder="Describe your issue with document evaluations, terminal outputs, or system exceptions..."
-                className="w-full px-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors leading-normal"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-xs focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors leading-normal"
               />
             </div>
 

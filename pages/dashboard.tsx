@@ -25,7 +25,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="space-x-2">
-            <Link href="/verify"><a className="px-3 py-1 bg-indigo-600 text-white rounded">New Verify</a></Link>
+            <Link href="/verify">New Verify</Link>
             <button onClick={() => { localStorage.removeItem('vk_token'); window.location.href = '/'; }} className="px-3 py-1 border rounded">Logout</button>
           </div>
         </div>

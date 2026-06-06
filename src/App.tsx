@@ -149,7 +149,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-slate-150 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest gap-4">
+        <div className="max-w-7xl mx-auto border-t border-slate-200 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest gap-4">
           <div>© 2026 VerifyKit International. All resources reserved.</div>
           <div className="flex items-center gap-2 bg-slate-100 px-3 py-1 rounded border">
             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />

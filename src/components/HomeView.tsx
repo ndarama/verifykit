@@ -50,7 +50,7 @@ export default function HomeView({ setCurrentPage }: HomeViewProps) {
     <div id="home-view-container" className="space-y-16 py-12 md:py-20 animate-fade-in">
       {/* Hero Section */}
       <div className="max-w-4xl mx-auto text-center space-y-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-150 text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-[10px] font-bold text-indigo-700 uppercase tracking-widest font-mono">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Next-Generation Compliance Framework</span>
         </div>
@@ -90,14 +90,14 @@ export default function HomeView({ setCurrentPage }: HomeViewProps) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7 space-y-4">
             <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Interactive Verification Sandbox</h3>
-            <p className="text-slate-605 text-sm leading-relaxed">
+            <p className="text-slate-600 text-sm leading-relaxed">
               VerifyKit enables compliance officers to enter partner directories, submit JPG front scans, and receive realtime structured validation. Try registering your company, start a request, and inspect how data compares with verified standards.
             </p>
             
             <div className="space-y-3 pt-2">
               <div className="flex items-center gap-2 text-sm text-slate-700">
                 <CheckSquare className="w-4 h-4 text-emerald-500 shrink-0" />
-                <span>Simulate **Rwandan National Identity Cards** flawlessly.</span>
+                <span>Process Genuine ID documents with real OCR extraction.</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-700">
                 <CheckSquare className="w-4 h-4 text-emerald-500 shrink-0" />
@@ -121,7 +121,7 @@ export default function HomeView({ setCurrentPage }: HomeViewProps) {
             <div className="space-y-2.5 font-sans">
               <div className="text-xs">
                 <span className="block font-bold text-slate-500">Document Type</span>
-                <span className="font-medium text-slate-800">National Identity Card (Rwanda)</span>
+                <span className="font-medium text-slate-800">International ID Document</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div>

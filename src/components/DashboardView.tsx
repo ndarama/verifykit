@@ -138,15 +138,15 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
 
       {/* Audit Logs Table Block */}
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        <div className="px-5 py-4 border-b border-slate-150 flex flex-col md:flex-row md:items-center md:justify-between gap-3.5 bg-slate-50/50">
+        <div className="px-5 py-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3.5 bg-slate-50/50">
           <div>
             <h3 className="font-bold text-slate-900 text-base">ID Verification Registry</h3>
-            <p className="text-xs text-slate-505">Search and inspect extracted details of past compliance matches</p>
+            <p className="text-xs text-slate-500">Search and inspect extracted details of past compliance matches</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Search Input */}
-            <div className="relative flex items-center bg-white border border-slate-250 rounded-lg px-2.5 py-1.5 h-9">
+            <div className="relative flex items-center bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 h-9">
               <Search className="w-4 h-4 text-slate-400 mr-2" />
               <input
                 type="text"
@@ -165,7 +165,7 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
                   onClick={() => setStatusFilter(type)}
                   className={`px-3 py-1 rounded-md text-xs font-semibold uppercase tracking-wider transition-all ${
                     statusFilter === type
-                      ? 'bg-white text-slate-800 shadow-sm border border-slate-150'
+                      ? 'bg-white text-slate-800 shadow-sm border border-slate-200'
                       : 'text-slate-500 hover:text-slate-800'
                   }`}
                 >
@@ -190,7 +190,7 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 text-slate-450 uppercase text-[10px] tracking-wider font-bold">
+                  <tr className="border-b border-slate-200 text-slate-400 uppercase text-[10px] tracking-wider font-bold">
                     <th className="py-3 px-5">ID Code</th>
                     <th className="py-3 px-5">Scanned ID Holder Name</th>
                     <th className="py-3 px-5">Origin Jurisdiction</th>
@@ -228,8 +228,8 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border capitalize ${
                             record.status === 'Verified'
-                              ? 'bg-teal-50 border-teal-250 text-teal-800'
-                              : 'bg-rose-50 border-rose-250 text-rose-800'
+                              ? 'bg-teal-50 border-teal-200 text-teal-800'
+                              : 'bg-rose-50 border-rose-200 text-rose-800'
                           }`}
                         >
                           <span className={`w-1.5 h-1.5 rounded-full ${
@@ -254,7 +254,7 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
             </div>
 
             {/* Mobile Cards List View */}
-            <div className="md:hidden divide-y divide-slate-150" id="mobile-registry-list">
+            <div className="md:hidden divide-y divide-slate-200" id="mobile-registry-list">
               {filteredRecords.map((record) => (
                 <div key={record.id} className="p-4 space-y-3 hover:bg-slate-50/50 transition">
                   <div className="flex justify-between items-start">
@@ -271,14 +271,14 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border capitalize ${
                         record.status === 'Verified'
                           ? 'bg-teal-50 border-teal-200 text-teal-800'
-                          : 'bg-rose-50 border-rose-250 text-rose-800'
+                          : 'bg-rose-50 border-rose-200 text-rose-800'
                       }`}
                     >
                       {record.status}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-150">
+                  <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
                     <div>
                       <span className="text-[8px] font-black text-slate-400 block uppercase">Origin</span>
                       <span className="font-semibold text-slate-800">{record.extractedData ? record.extractedData.country : 'Unknown'}</span>
@@ -287,7 +287,7 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
                       <span className="text-[8px] font-black text-slate-400 block uppercase">Timestamp</span>
                       <span className="text-slate-500 font-medium">{record.timestamp}</span>
                     </div>
-                    <div className="col-span-2 border-t pt-1.5 mt-1 border-slate-150">
+                    <div className="col-span-2 border-t pt-1.5 mt-1 border-slate-200">
                       <span className="text-[8px] font-black text-slate-400 block uppercase">Document</span>
                       <span className="font-medium text-slate-800">{record.extractedData ? record.extractedData.document : 'Failed OCR'}</span>
                       <span className="block text-[9px] font-mono text-slate-400 truncate">{record.fileName}</span>
@@ -297,7 +297,7 @@ export default function DashboardView({ setCurrentPage, setSelectedRecord }: Das
                   <div className="flex justify-end pt-1">
                     <button
                       onClick={() => handleViewRecord(record)}
-                      className="w-full text-center inline-flex items-center justify-center gap-1 text-xs text-indigo-600 hover:text-indigo-850 bg-indigo-50/50 hover:bg-indigo-100/50 py-2 rounded-xl border border-indigo-200 transition font-bold cursor-pointer"
+                      className="w-full text-center inline-flex items-center justify-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50/50 hover:bg-indigo-100/50 py-2 rounded-xl border border-indigo-200 transition font-bold cursor-pointer"
                     >
                       <span>Inspect Details</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />

@@ -116,14 +116,14 @@ export default function ConsoleTerminal({ isOpen, onToggle }: ConsoleTerminalPro
       <div
         id="dev-terminal-header"
         onClick={onToggle}
-        className="flex items-center justify-between px-4 h-11 bg-gray-900 border-b border-gray-800 cursor-pointer select-none hover:bg-gray-850"
+        className="flex items-center justify-between px-4 h-11 bg-gray-900 border-b border-gray-800 cursor-pointer select-none hover:bg-gray-900"
       >
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-emerald-400 animate-pulse" />
           <span className="font-mono text-xs font-semibold text-gray-200 tracking-wider uppercase">
             VerifyKit Developer Terminal Console &amp; TS Log Engine
           </span>
-          <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] px-1.5 py-0.2 rounded font-mono">
+          <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-mono">
             Active
           </span>
         </div>
@@ -141,7 +141,7 @@ export default function ConsoleTerminal({ isOpen, onToggle }: ConsoleTerminalPro
           <button
             id="clear-terminal-btn"
             onClick={handleClear}
-            className="flex items-center gap-1.5 px-2.5 py-1 text-gray-400 hover:text-white bg-gray-850 rounded border border-gray-800 text-[11px] transition-all hover:bg-gray-800"
+            className="flex items-center gap-1.5 px-2.5 py-1 text-gray-400 hover:text-white bg-gray-900 rounded border border-gray-800 text-[11px] transition-all hover:bg-gray-800"
             title="Clear console records"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -223,7 +223,7 @@ export default function ConsoleTerminal({ isOpen, onToggle }: ConsoleTerminalPro
                 >
                   <span className="text-gray-600 text-[10px] mt-0.5 select-none">{log.timestamp}</span>
                   <span
-                    className={`text-[9px] uppercase font-bold px-1.5 py-0.2 rounded border select-none ${getBadgeStyle(
+                    className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded border select-none ${getBadgeStyle(
                       log.type
                     )}`}
                   >

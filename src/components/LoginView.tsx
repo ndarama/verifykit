@@ -94,7 +94,7 @@ export default function LoginView({ setCurrentPage }: LoginViewProps) {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="e.g., sarah@rwandatech.rw"
-                className="w-full pl-10 pr-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                className="w-full pl-10 pr-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function LoginView({ setCurrentPage }: LoginViewProps) {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-3.5 py-2 rounded-lg border border-slate-250 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-1.5 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                className="w-full pl-10 pr-3.5 py-2 rounded-lg border border-slate-300 bg-slate-50 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
               />
             </div>
           </div>
@@ -122,12 +122,12 @@ export default function LoginView({ setCurrentPage }: LoginViewProps) {
             type="submit"
             className="w-full mt-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md shadow-indigo-100 hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <LogIn className="w-4.5 h-4.5" />
+            <LogIn className="w-4 h-4" />
             <span>Sign In to VerifyKit</span>
           </button>
         </form>
 
-        <div className="mt-6 pt-4 border-t border-slate-150 text-center text-xs text-slate-500">
+        <div className="mt-6 pt-4 border-t border-slate-200 text-center text-xs text-slate-500">
           No registered hub?{' '}
           <button
             onClick={() => setCurrentPage('register')}
