@@ -35,6 +35,7 @@ export interface CompanyData {
 export interface ExtractedIdData {
   document: string;
   country: string;
+  originCountry?: string;
   
   // Front Fields
   names: string;
@@ -72,4 +73,3 @@ export interface VerificationRecord {
   fileName: string;
   companyEmail?: string;
 }
-

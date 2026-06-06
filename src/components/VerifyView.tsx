@@ -91,13 +91,14 @@ export default function VerifyView({ setCurrentPage, setSelectedRecord }: Verify
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const emptyIDData: ExtractedIdData = {
-    document: 'REPUBLIC OF RWANDA NATIONAL ID',
-    country: 'RWANDA',
+    document: 'International ID',
+    country: '',
+    originCountry: '',
     names: '',
     idNo: '',
     dob: '',
     sex: '',
-    nationality: 'RWANDAN',
+    nationality: '',
     placeOfIssue: '',
     dateOfIssue: '',
     expiry: '',
@@ -106,7 +107,7 @@ export default function VerifyView({ setCurrentPage, setSelectedRecord }: Verify
     dateOfIssueBack: '',
     validUntil: '',
     placeOfBirth: '',
-    nationalityBack: 'RWANDAN',
+    nationalityBack: '',
     religion: '',
     address: '',
     bloodGroup: '',
@@ -117,7 +118,8 @@ export default function VerifyView({ setCurrentPage, setSelectedRecord }: Verify
 
   const sparseIDData: ExtractedIdData = {
     document: 'Genuine ID',
-    country: 'RWANDA',
+    country: 'Republic of Rwanda',
+    originCountry: 'Republic of Rwanda',
     names: 'Jean Paul Shyaka',
     idNo: '1199380020199201',
     dob: '12/12/1993',
@@ -766,14 +768,21 @@ export default function VerifyView({ setCurrentPage, setSelectedRecord }: Verify
                   />
                 </div>
                 <div>
-                  <span className="block text-[9px] font-black text-slate-400 uppercase tracking-widest">Issuing Sovereign Jurisdiction</span>
-                  <div className="w-full mt-1 bg-white border border-slate-200 px-3 py-2 rounded-lg font-black text-xs text-slate-700 flex items-center gap-1.5 select-none">
+                  <span className="block text-[9px] font-black text-slate-400 uppercase tracking-widest">Origin Country / Issuing Jurisdiction</span>
+                  <div className="w-full mt-1 bg-white border border-slate-300 px-3 py-2 rounded-lg font-black text-xs text-slate-700 flex items-center gap-1.5">
                     <span className="flex shrink-0 gap-0.5">
                       <span className="w-2 h-1.5 bg-cyan-400" />
                       <span className="w-2 h-1.5 bg-yellow-400" />
                       <span className="w-2 h-1.5 bg-emerald-500" />
                     </span>
-                    {liveIDData.country} (Verified)
+                    <input
+                      type="text"
+                      id="auditor-input-origin-country"
+                      value={liveIDData.originCountry || liveIDData.country}
+                      onChange={(e) => setLiveIDData({ ...liveIDData, country: e.target.value, originCountry: e.target.value })}
+                      placeholder="Detected issuing country"
+                      className="min-w-0 flex-1 bg-transparent border-0 p-0 font-black text-xs text-slate-700 focus:outline-none"
+                    />
                   </div>
                 </div>
               </div>

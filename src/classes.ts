@@ -1089,14 +1089,25 @@ export class VerificationService {
       this.addLog('comparison', `Extracted document name: '${extracted.names}'`);
       this.addLog('comparison', `Assessed Layout Similarity: ${(extracted.similarityScore * 100).toFixed(0)}%`);
 
-      // 90% strict similarity check requirement implementation!
-      if (extracted.similarityScore >= 0.90) {
+      extracted.originCountry = extracted.originCountry || extracted.country || 'Unknown Issuing Origin';
+      extracted.country = extracted.country || extracted.originCountry;
+
+      const coreIdentityFields = [extracted.names, extracted.idNo, extracted.dob]
+        .filter(value => value && value.trim().length > 0).length;
+      const hasDocumentOrigin = Boolean(
+        extracted.document?.trim() &&
+        extracted.country?.trim() &&
+        !/^Unknown/i.test(extracted.country.trim())
+      );
+      const hasEnoughIdentityEvidence = coreIdentityFields >= 2 && Boolean(extracted.document?.trim());
+
+      if ((hasDocumentOrigin && hasEnoughIdentityEvidence) || extracted.similarityScore >= 0.55) {
         status = 'Verified';
-        this.addLog('success', `Compliance check: SUCCESS. Subject ID matched Genuine ID layout specifications (Similarity Score: ${(extracted.similarityScore * 100).toFixed(1)}%).`);
+        this.addLog('success', `Compliance check: SUCCESS. Subject ID matched Genuine ID evidence requirements (Origin: ${extracted.originCountry}, Similarity Score: ${(extracted.similarityScore * 100).toFixed(1)}%).`);
       } else {
         status = 'Rejected';
-        reason = `Compliance Rejection: Similarity score of ${(extracted.similarityScore * 100).toFixed(0)}% falls below the 90% threshold. The document is missing critical security markings (SAMPLE / DEMO watermarks or back-side identity parameters).`;
-        this.addLog('error', `Compliance check: LACKS REQUISITE SIMILARITY (${(extracted.similarityScore * 100).toFixed(0)}%). Rejected.`);
+        reason = `Compliance Rejection: OCR did not extract enough identity evidence or a trusted issuing origin from the uploaded document.`;
+        this.addLog('error', `Compliance check: LACKS REQUIRED ID EVIDENCE (${(extracted.similarityScore * 100).toFixed(0)}%). Rejected.`);
       }
     } catch (extractErr: any) {
       status = 'Rejected';

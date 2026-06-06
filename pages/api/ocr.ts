@@ -16,6 +16,36 @@ type OcrResult = {
   confidence?: number;
 };
 
+type CountryProfile = {
+  name: string;
+  code: string;
+  nationality?: string;
+  patterns: RegExp[];
+};
+
+const COUNTRY_PROFILES: CountryProfile[] = [
+  { name: 'Republic of Rwanda', code: 'RWA', nationality: 'Rwandan', patterns: [/REPUB(?:U)?LIKA\s+Y['\u2019]?\s*U?\s*RWANDA/, /REPUBLIC\s+OF\s+RWANDA/, /\bRWANDA\b/] },
+  { name: 'United States', code: 'USA', nationality: 'American', patterns: [/UNITED\s+STATES\s+OF\s+AMERICA/, /\bUNITED\s+STATES\b/, /\bUNITED\s+STATE\b/, /\bU\.?S\.?A\b/, /DEPARTMENT\s+OF\s+STATE/] },
+  { name: 'Canada', code: 'CAN', nationality: 'Canadian', patterns: [/\bCANADA\b/] },
+  { name: 'United Kingdom', code: 'GBR', nationality: 'British', patterns: [/UNITED\s+KINGDOM/, /GREAT\s+BRITAIN/, /\bBRITISH\b/] },
+  { name: 'France', code: 'FRA', nationality: 'French', patterns: [/\bFRANCE\b/, /REPUBLIQUE\s+FRANCAISE/] },
+  { name: 'Kenya', code: 'KEN', nationality: 'Kenyan', patterns: [/\bKENYA\b/, /REPUBLIC\s+OF\s+KENYA/] },
+  { name: 'Uganda', code: 'UGA', nationality: 'Ugandan', patterns: [/\bUGANDA\b/, /REPUBLIC\s+OF\s+UGANDA/] },
+  { name: 'Tanzania', code: 'TZA', nationality: 'Tanzanian', patterns: [/\bTANZANIA\b/, /UNITED\s+REPUBLIC\s+OF\s+TANZANIA/] },
+  { name: 'Burundi', code: 'BDI', nationality: 'Burundian', patterns: [/\bBURUNDI\b/, /REPUBLIC\s+OF\s+BURUNDI/] },
+  { name: 'South Africa', code: 'ZAF', nationality: 'South African', patterns: [/SOUTH\s+AFRICA/, /REPUBLIC\s+OF\s+SOUTH\s+AFRICA/] },
+  { name: 'Nigeria', code: 'NGA', nationality: 'Nigerian', patterns: [/\bNIGERIA\b/, /FEDERAL\s+REPUBLIC\s+OF\s+NIGERIA/] },
+  { name: 'Ghana', code: 'GHA', nationality: 'Ghanaian', patterns: [/\bGHANA\b/, /REPUBLIC\s+OF\s+GHANA/] },
+  { name: 'Ethiopia', code: 'ETH', nationality: 'Ethiopian', patterns: [/\bETHIOPIA\b/] },
+  { name: 'India', code: 'IND', nationality: 'Indian', patterns: [/\bINDIA\b/, /REPUBLIC\s+OF\s+INDIA/] },
+  { name: 'China', code: 'CHN', nationality: 'Chinese', patterns: [/\bCHINA\b/, /PEOPLE'?S\s+REPUBLIC\s+OF\s+CHINA/] },
+  { name: 'Japan', code: 'JPN', nationality: 'Japanese', patterns: [/\bJAPAN\b/] },
+  { name: 'Germany', code: 'DEU', nationality: 'German', patterns: [/\bGERMANY\b/, /BUNDESREPUBLIK\s+DEUTSCHLAND/] },
+  { name: 'Belgium', code: 'BEL', nationality: 'Belgian', patterns: [/\bBELGIUM\b/, /\bBELGIQUE\b/] },
+  { name: 'Netherlands', code: 'NLD', nationality: 'Dutch', patterns: [/\bNETHERLANDS\b/, /\bNEDERLAND\b/] },
+  { name: 'Australia', code: 'AUS', nationality: 'Australian', patterns: [/\bAUSTRALIA\b/] },
+];
+
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
   return Promise.race([
     promise,
@@ -168,19 +198,79 @@ function extractValueAfterLabel(
   return '';
 }
 
-function hasNationalIdEvidence(text: string, parsed: ExtractedIdData): boolean {
+function extractLooseValueAfterLabel(lines: string[], labelPattern: RegExp, length = 8): string {
+  const index = findLineIndex(lines, labelPattern);
+  if (index < 0) return '';
+
+  const context = scanContext(lines, index, length);
+  for (const [offset, line] of context.entries()) {
+    const candidate = offset === 0
+      ? normalizeOcrLine(line.replace(labelPattern, '').replace(/^[:/\-\s]+/, ''))
+      : normalizeOcrLine(line);
+    if (!isNoiseLine(candidate) && candidate.length >= 2) return candidate;
+  }
+  return '';
+}
+
+function detectIssuingCountry(text: string): CountryProfile | null {
+  const upper = text.toUpperCase();
+  return COUNTRY_PROFILES.find(country => country.patterns.some(pattern => pattern.test(upper))) || null;
+}
+
+function toTitleCase(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\b\w/g, char => char.toUpperCase())
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function inferOriginCountryName(text: string): string {
+  const upper = text.toUpperCase();
+  const countryLine = upper.match(/\bCOUNTRY\s*[:/\-]?\s*([A-Z][A-Z ]{3,35})\b/);
+  if (countryLine) return toTitleCase(countryLine[1]);
+
+  const originPhrase = upper.match(/\b(?:REPUBLIC|KINGDOM|GOVERNMENT|STATE)\s+OF\s+([A-Z][A-Z ]{3,35})\b/);
+  if (originPhrase) return toTitleCase(originPhrase[1]);
+
+  return '';
+}
+
+function detectDocumentType(text: string): string {
+  const upper = text.toUpperCase();
+  if (/PASSPORT/.test(upper)) return 'Passport';
+  if (/DRIV(?:ER|ING).{0,12}LICEN[CS]E|LICEN[CS]E/.test(upper)) return 'Driver License';
+  if (/RESIDEN(?:T|CE).{0,12}(?:CARD|PERMIT)|PERMANENT\s+RESIDENT/.test(upper)) return 'Resident ID';
+  if (/VOTER/.test(upper)) return 'Voter ID';
+  if (/NATIONAL\s+(?:IDENTITY|IDENTIFICATION|ID)|IDENTITY\s+CARD|IDENTIFICATION\s+CARD|ID\s+CARD|INDANGAMUNTU/.test(upper)) return 'International ID';
+  if (/\b(?:ID|IDENTIFICATION|DOCUMENT)\b/.test(upper)) return 'International ID';
+  return '';
+}
+
+function hasIdentityDocumentEvidence(text: string, parsed: ExtractedIdData): boolean {
   const upper = text.toUpperCase();
   const markerPatterns = [
-    /REPUB(?:U)?LIKA\s+Y['’]?\s*U?\s*RWANDA/,
+    /REPUB(?:U)?LIKA\s+Y['\u2019]?\s*U?\s*RWANDA/,
     /REPUBLIC\s+OF\s+RWANDA/,
     /INDANGAMUNTU/,
     /NATIONAL\s+IDENTITY\s+CARD/,
+    /IDENTITY\s+CARD|IDENTIFICATION\s+CARD|ID\s+CARD/,
+    /PASSPORT|DRIV(?:ER|ING).{0,12}LICEN[CS]E|RESIDEN(?:T|CE).{0,12}(?:CARD|PERMIT)|VOTER\s+ID/,
+    /GOVERNMENT|REPUBLIC|DEPARTMENT\s+OF\s+STATE/,
+    /DATE\s+OF\s+BIRTH|\bDOB\b/,
+    /GENDER|SEX/,
     /\b(?:ID|1D)\s*NO\b/,
-    /CARD\s*NO|YIKARITA/,
+    /DOCUMENT\s*(?:NO|NUMBER)|CARD\s*(?:NO|NUMBER)|LICEN[CS]E\s*(?:NO|NUMBER)|PASSPORT\s*(?:NO|NUMBER)|YIKARITA/,
     /IGITSINA|SEX/,
     /UBWANGANZIRA|NATIONALITY/,
   ];
   const markerCount = markerPatterns.reduce((count, pattern) => count + (pattern.test(upper) ? 1 : 0), 0);
+  const normalizedCountry = (parsed.country || '').trim();
+  const hasKnownCountry = Boolean(
+    (normalizedCountry && !/^Unknown/i.test(normalizedCountry)) ||
+    detectIssuingCountry(text) ||
+    inferOriginCountryName(text)
+  );
   const coreFieldCount = [parsed.names, parsed.idNo, parsed.dob, parsed.sex, parsed.cardNo]
     .filter((value) => value && value.trim().length > 0).length;
   const supportingFieldCount = [
@@ -196,7 +286,11 @@ function hasNationalIdEvidence(text: string, parsed: ExtractedIdData): boolean {
     parsed.bloodGroup,
   ].filter((value) => value && value.trim().length > 0).length;
 
-  return markerCount >= 2 && coreFieldCount >= 2 && supportingFieldCount >= 2;
+  return (
+    (markerCount >= 2 && coreFieldCount >= 2 && supportingFieldCount >= 1) ||
+    (markerCount >= 1 && hasKnownCountry && coreFieldCount >= 2) ||
+    (Boolean(parsed.document) && hasKnownCountry && coreFieldCount >= 3)
+  );
 }
 
 // Lightweight parser: map OCR text into the ExtractedIdData shape (best-effort)
@@ -204,6 +298,7 @@ function parseOcrText(text: string, fileName: string): ExtractedIdData {
   const parsed: ExtractedIdData = {
     document: '',
     country: '',
+    originCountry: '',
     names: '',
     idNo: '',
     dob: '',
@@ -229,6 +324,14 @@ function parseOcrText(text: string, fileName: string): ExtractedIdData {
   const lines = text.replace(/\r/g, '\n').split('\n').map(normalizeOcrLine).filter(Boolean);
   const upper = text.toUpperCase();
   const places = ['Kigali','Nyarugenge','Huye','Musanze','Rubavu','Bugesera','Kayonza','Rwamagana','Gicumbi','Karongi','Nyanza','Ruhango','Nyamagabe','Kamonyi','Gisenyi','Byumba','Kicukiro','Remera','Nyamirambo','Kanombe','Nyagatare','Kimironko'];
+  const countryProfile = detectIssuingCountry(text);
+  const inferredOriginCountry = countryProfile?.name || inferOriginCountryName(text);
+
+  parsed.document = detectDocumentType(text);
+  if (inferredOriginCountry) {
+    parsed.country = inferredOriginCountry;
+    parsed.originCountry = inferredOriginCountry;
+  }
 
   const namesIndex = findLineIndex(lines, /AMAZI|NAMES/i);
   if (namesIndex >= 0) {
@@ -252,14 +355,25 @@ function parseOcrText(text: string, fileName: string): ExtractedIdData {
       break;
     }
   }
+  if (!parsed.idNo) {
+    const genericIdIndex = findLineIndex(lines, /(?:ID|IDENTIFICATION|DOCUMENT|DOC|CARD|LICEN[CS]E|PASSPORT)\s*(?:NO|NUMBER|#)|\bNO\.?\b/i);
+    for (const line of scanContext(lines, genericIdIndex >= 0 ? genericIdIndex : 0, genericIdIndex >= 0 ? 8 : lines.length)) {
+      if (firstDateValue(line)) continue;
+      const match = line.match(/\b[A-Z]{0,3}\s*\d[A-Z0-9\s\-]{5,22}\b/i) || line.match(/\b[A-Z0-9]{6,18}\b/i);
+      if (match) {
+        parsed.idNo = normalizeOcrLine(match[0]).replace(/\s{2,}/g, ' ');
+        break;
+      }
+    }
+  }
 
   const allDates = datesIn(lines);
-  const birthContextDates = datesIn(scanContext(lines, findLineIndex(lines, /DATE OF BIRTH|YAVUKI(?:Y|V)EHO/i), 10));
+  const birthContextDates = datesIn(scanContext(lines, findLineIndex(lines, /DATE OF BIRTH|BIRTH\s*DATE|\bDOB\b|YAVUKI(?:Y|V)EHO/i), 10));
   parsed.dob = birthContextDates
     .filter(date => yearOf(date) < 2010)
     .sort((a, b) => yearOf(a) - yearOf(b))[0] || '';
 
-  const issueContextDates = datesIn(scanContext(lines, findLineIndex(lines, /DATE OF ISSUE|YATANGIWEHO|YATANGJWE/i), 12));
+  const issueContextDates = datesIn(scanContext(lines, findLineIndex(lines, /DATE OF ISSUE|ISSUE\s*DATE|ISSUED|YATANGIWEHO|YATANGJWE/i), 12));
   parsed.dateOfIssue = issueContextDates
     .filter(date => yearOf(date) >= 2010)
     .sort((a, b) => yearOf(a) - yearOf(b))[0] || '';
@@ -278,13 +392,15 @@ function parseOcrText(text: string, fileName: string): ExtractedIdData {
     parsed.dateOfIssueBack = parsed.dateOfIssue;
   }
 
-  const sexValue = extractValueAfterLabel(lines, /SEX|IGITSINA|TGTSINA/i, /\b[GF](?:e)?\b/i, 8);
+  const sexValue = extractValueAfterLabel(lines, /SEX|GENDER|IGITSINA|TGTSINA/i, /\b[MGF](?:ALE|EMALE|e)?\b/i, 8);
   if (/^G/i.test(sexValue) || /\bMALE\b/i.test(text)) parsed.sex = 'G';
+  else if (/^M/i.test(sexValue)) parsed.sex = 'M';
   else if (/^F/i.test(sexValue) || /\bFEMALE\b/i.test(text)) parsed.sex = 'F';
 
-  const cardValue = extractValueAfterLabel(lines, /CARD\s*No|YIKARITA/i, /\bA\s*\d(?:\s*\d){6,12}\b/i, 8);
+  const cardValue = extractValueAfterLabel(lines, /CARD\s*No|CARD\s*NUMBER|DOCUMENT\s*NUMBER|PASSPORT\s*NUMBER|LICEN[CS]E\s*NUMBER|YIKARITA/i, /\b[A-Z]?\s*\d(?:[A-Z0-9\s\-]){5,16}\b/i, 8);
   const cardMatch = cardValue.match(/\bA\s*\d(?:\s*\d){6,12}\b/i) || text.match(/\bA\d{6,12}\b/i);
   if (cardMatch) parsed.cardNo = cardMatch[0].replace(/\s+/g, '').toUpperCase();
+  else if (cardValue) parsed.cardNo = cardValue.replace(/\s{2,}/g, ' ').toUpperCase();
 
   const bloodContext = scanContext(lines, findLineIndex(lines, /BLOOD GROUP|BLOOD|UBWOKO/i), 6);
   const bgLine = bloodContext.find(line => /(?:\bAB\b|\bA\b|\bB\b|\bO\b|\b0\b)\s*[+\-]|(^|\s)o\+|(^|\s)or(\s|$)/i.test(line));
@@ -296,15 +412,13 @@ function parseOcrText(text: string, fileName: string): ExtractedIdData {
   parsed.placeOfIssue = firstKnownPlaceIn(scanContext(lines, findLineIndex(lines, /PLACE OF ISSUE|YATANGIWE/i), 10), places);
   parsed.placeOfBirth = firstKnownPlaceIn(scanContext(lines, findLineIndex(lines, /PLACE OF BIRTH|YAVUTSE|YAWTSE/i), 10), places);
 
-  if (upper.includes('RWANDA')) {
-    parsed.document = upper.includes('NATIONAL') ? 'International ID' : parsed.document;
-    parsed.country = 'Republic of Rwanda';
-  }
-
-  const nationalityValue = extractValueAfterLabel(lines, /NATIONALITY|UBWANGANZIRA|UBWENEGHUGU/i, /\bRWANDAN\b/i, 8);
+  const nationalityValue = extractValueAfterLabel(lines, /NATIONALITY|CITIZENSHIP|CITIZEN|UBWANGANZIRA|UBWENEGHUGU/i, /\b[A-Z][A-Z]{3,20}\b/i, 8);
   if (nationalityValue) {
-    parsed.nationality = 'Rwandan';
-    parsed.nationalityBack = 'Rwandan';
+    parsed.nationality = toTitleCase(nationalityValue);
+    parsed.nationalityBack = parsed.nationality;
+  } else if (countryProfile?.nationality) {
+    parsed.nationality = countryProfile.nationality;
+    parsed.nationalityBack = countryProfile.nationality;
   }
 
   const religions = ['Kiliziya Gatolika','Gatolika','Protestant','Adventist','Islam','Christian','Assembly of God'];
@@ -327,6 +441,20 @@ function parseOcrText(text: string, fileName: string): ExtractedIdData {
       .join(', ')
       .replace(/,\s*,/g, ',')
       .trim();
+
+    if (!parsed.address) {
+      parsed.address = scanContext(lines, addressIndex + 1, 4)
+        .filter(line => !isNoiseLine(line) && !/BLOOD|GROUP|NATIONALITY|SEX|DATE|VALID|ISSUE/i.test(line))
+        .join(', ')
+        .trim();
+    }
+  }
+
+  if (!parsed.names) {
+    const genericName = extractLooseValueAfterLabel(lines, /(?:FULL\s+)?NAME(?:S)?|SURNAME|GIVEN\s+NAMES?|CARDHOLDER|HOLDER/i, 8);
+    if (genericName && isNameValue(genericName)) {
+      parsed.names = cleanName(genericName);
+    }
   }
 
   if (!parsed.names) {
@@ -337,6 +465,24 @@ function parseOcrText(text: string, fileName: string): ExtractedIdData {
       }
     }
   }
+
+  if (parsed.nationality && /NATIONALITY|CITIZEN/i.test(parsed.nationality)) {
+    parsed.nationality = countryProfile?.nationality || '';
+    parsed.nationalityBack = parsed.nationality;
+  }
+  if (!parsed.country && parsed.nationality) {
+    const nationalityCountry = COUNTRY_PROFILES.find(country => country.nationality?.toUpperCase() === parsed.nationality.toUpperCase());
+    if (nationalityCountry) {
+      parsed.country = nationalityCountry.name;
+      parsed.originCountry = nationalityCountry.name;
+    }
+  }
+  if (!parsed.originCountry && parsed.country) parsed.originCountry = parsed.country;
+  if (!parsed.country) {
+    parsed.country = 'Unknown Issuing Origin';
+    parsed.originCountry = 'Unknown Issuing Origin';
+  }
+  if (!parsed.document && hasIdentityDocumentEvidence(text, parsed)) parsed.document = 'International ID';
 
   const fieldsToCheck: (keyof ExtractedIdData)[] = ['document','country','names','idNo','dob','sex','nationality','placeOfIssue','dateOfIssue','expiry','cardNo','placeOfIssueBack','dateOfIssueBack','validUntil','placeOfBirth','nationalityBack','religion','address','bloodGroup'];
   const populated = fieldsToCheck.reduce((count, key) => ((parsed as any)[key] && (parsed as any)[key].toString().trim().length > 0) ? count + 1 : count, 0);
@@ -386,7 +532,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       parsed.ocrText = text;
       parsed.ocrConfidence = ocr.confidence ?? null;
 
-      if (!hasNationalIdEvidence(text, parsed)) {
+      if (!hasIdentityDocumentEvidence(text, parsed)) {
         return res.status(422).json({
           error: 'Rejected: uploaded image does not appear to be a Genuine ID document.',
           ocrText: text,

@@ -85,9 +85,46 @@ export default function ResultView({
     return num;
   };
 
+  const originCountry = data.originCountry || data.country || 'Unknown Issuing Origin';
+
+  const getCountryCode = (country: string) => {
+    const normalized = country.toLowerCase();
+    const codes: Record<string, string> = {
+      'republic of rwanda': 'RWA',
+      rwanda: 'RWA',
+      'united states': 'USA',
+      canada: 'CAN',
+      'united kingdom': 'GBR',
+      france: 'FRA',
+      kenya: 'KEN',
+      uganda: 'UGA',
+      tanzania: 'TZA',
+      burundi: 'BDI',
+      'south africa': 'ZAF',
+      nigeria: 'NGA',
+      ghana: 'GHA',
+      ethiopia: 'ETH',
+      india: 'IND',
+      china: 'CHN',
+      japan: 'JPN',
+      germany: 'DEU',
+      belgium: 'BEL',
+      netherlands: 'NLD',
+      australia: 'AUS',
+    };
+    return codes[normalized] || 'XXX';
+  };
+
+  const formatSex = (sex: string) => {
+    const normalized = sex.toUpperCase();
+    if (normalized === 'G' || normalized === 'M') return `${sex} (Male)`;
+    if (normalized === 'F') return `${sex} (Female)`;
+    return sex || 'Unknown';
+  };
+
   const generateMRZLines = () => {
     const docCode = "ID";
-    const countryCode = "RWA";
+    const countryCode = getCountryCode(originCountry);
     const cleanID = data.idNo.replace(/\s+/g, '').padEnd(9, '<').substring(0, 9);
     const birthYear = data.dob.split('/').length === 3 ? data.dob.split('/')[2].substring(2) : '94';
     const birthMonth = data.dob.split('/').length === 3 ? data.dob.split('/')[1] : '05';
@@ -97,12 +134,12 @@ export default function ResultView({
     const expiryMonth = data.expiry.split('/').length === 3 ? data.expiry.split('/')[1] : '04';
     const expiryDay = data.expiry.split('/').length === 3 ? data.expiry.split('/')[0] : '14';
     
-    const genderRwa = data.sex === 'G' ? 'M' : 'F';
+    const genderCode = data.sex === 'G' ? 'M' : data.sex.toUpperCase().substring(0, 1) || '<';
     const lastName = data.names.trim().split(/\s+/).pop() || "HABIMANA";
     const firstName = data.names.trim().split(/\s+/)[0] || "JEAN";
     
     const mrzLine1 = `${docCode}${countryCode}${cleanID}<<<<<<<<<<<<<<<`;
-    const mrzLine2 = `${birthYear}${birthMonth}${birthDay}8${genderRwa}${expiryYear}${expiryMonth}${expiryDay}7RWA<<<<<<<<<<<4`;
+    const mrzLine2 = `${birthYear}${birthMonth}${birthDay}8${genderCode}${expiryYear}${expiryMonth}${expiryDay}7${countryCode}<<<<<<<<<<<4`;
     const mrzLine3 = `${lastName}<<${firstName}<<<<<<<<<<<<<<<<<<<`.substring(0, 30).toUpperCase();
 
     return [mrzLine1, mrzLine2, mrzLine3];
@@ -191,7 +228,7 @@ export default function ResultView({
                       </span>
                     </div>
                     <div className="w-6 h-6 bg-yellow-400/20 border border-yellow-600 rounded-full flex items-center justify-center relative shadow-xs shrink-0">
-                      <span className="text-[6.5px] font-mono font-black text-yellow-800">RWA</span>
+                      <span className="text-[6.5px] font-mono font-black text-yellow-800">{getCountryCode(originCountry)}</span>
                     </div>
                   </div>
 
@@ -236,7 +273,7 @@ export default function ResultView({
                         </div>
                         <div>
                           <span className="text-[7px] font-black text-slate-400 block uppercase">Sex / Igitsina</span>
-                          <p className="font-bold text-slate-800">{data.sex === 'G' ? 'G (Male)' : 'F (Female)'}</p>
+                          <p className="font-bold text-slate-800">{formatSex(data.sex)}</p>
                         </div>
                       </div>
                     </div>
@@ -313,8 +350,9 @@ export default function ResultView({
                 {[
                   { label: "Names", val: data.names, icon: <User className="w-3.5 h-3.5" /> },
                   { label: "International ID Number", val: formatIDNumber(data.idNo), icon: <Hash className="w-3.5 h-3.5" /> },
+                  { label: "Origin Country", val: originCountry, icon: <Shield className="w-3.5 h-3.5" /> },
                   { label: "Date of Birth", val: data.dob, icon: <Calendar className="w-3.5 h-3.5" /> },
-                  { label: "Gender", val: data.sex === 'G' ? "Gabo / Male (G)" : "Gore / Female (F)", icon: <User className="w-3.5 h-3.5" /> },
+                  { label: "Gender", val: formatSex(data.sex), icon: <User className="w-3.5 h-3.5" /> },
                   { label: "Nationality", val: data.nationality, icon: <Shield className="w-3.5 h-3.5" /> },
                   { label: "Blood Group", val: data.bloodGroup, icon: <Shield className="w-3.5 h-3.5 text-rose-500" /> },
                   { label: "Residential Address", val: data.address, icon: <MapPin className="w-3.5 h-3.5" /> },
