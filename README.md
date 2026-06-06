@@ -4,7 +4,7 @@ VerifyKit is a TypeScript identity verification application that uploads a Genui
 
 My purpose for writing this software was to strengthen my ability to build a full-stack TypeScript project with real data flow. I wanted to practice class-based application logic, typed React state, server-side API handlers, image processing, OCR error handling, and clean validation behavior without relying on imagined or generated identity data.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/CjV5G7o5AuU)
 
 # Development Environment
 
