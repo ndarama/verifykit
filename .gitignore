@@ -8,3 +8,16 @@ coverage/
 !.env.example
 .next/
 out/
+assets/
+.env.example
+error.log
+debug.log
+*.local
+*.cache
+*.tmp
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.bak
